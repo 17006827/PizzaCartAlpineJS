@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Piza new creation</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='style.css'>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.10.5/dist/cdn.min.js" defer></script>
+    <style>
+        /* Add your CSS here */
+        .moon {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .pizza {
+            flex: 1 1 calc(33.333% - 40px); /* Adjust based on your layout */
+            box-sizing: border-box;
+        }
+        
+        .pizza img {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        @media (max-width: 768px) {
+            .pizza {
+                flex: 1 1 calc(50% - 40px);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .pizza {
+                flex: 1 1 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div x-data="pizzaCart">
+        <div class="notification" x-show="notification" x-text="notification" style="display: none;"></div>
+
+        <!-- Cart Section -->
+        <div class="container">
+            <div class="header">
+                <div class="main">
+                    <button class="btnopen" @click="showCart = true">
+                        <img src="cart.png" width="30" alt="">View Cart
+                    </button>
+                    <strong x-show="totalQty() > 0">
+                        <div><span x-text="totalQty()"></span> Items in the Cart</div>
+                        <div>Total price: R<span x-text="cartTot().toFixed(2)"></span></div>
+                    </strong>
+                </div>
+            </div>
+            <div class="cart-box">
+                <div class="cart" x-show="showCart">
+                    <button class="btn2" x-on:click="showCart = false">
+                        <img src="cart.png" width="30" alt="">Close Cart
+                    </button>
+                    <div>
+                        <table>
+                            <tr>
+                                <td colspan="3">
+                                    <div class="aa">
+                                        <h2>Cart</h2>
+                                        <img src="cart.png" width="30" alt="">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr x-show="SpizzaQty > 0">
+                                <td>Small Pizza</td>
+                                <td>
+                                    <span x-text="SpizzaQty"></span>
+                                    <button x-on:click="buyspizza" class="btn6">+</button>
+                                    <button x-on:click="cancelspizza" class="btn7">-</button>
+                                </td>
+                                <td>R<span x-text="SmallPizzaTot.toFixed(2)"></span></td>
+                            </tr>
+                            <tr x-show="mpizzaQty > 0">
+                                <td>Medium Pizza</td>
+                                <td>
+                                    <span x-text="mpizzaQty"></span>
+                                    <button x-on:click="buympizza" class="btn6">+</button>
+                                    <button x-on:click="cancelmpizza" class="btn7">-</button>
+                                </td>
+                                <td>R<span x-text="MediumPizzaTot.toFixed(2)"></span></td>
+                            </tr>
+                            <tr x-show="lpizzaQty > 0">
+                                <td>Large Pizza</td>
+                                <td>
+                                    <span x-text="lpizzaQty"></span>
+                                    <button x-on:click="buylpizza" class="btn6">+</button>
+                                    <button x-on:click="cancellpizza" class="btn7">-</button>
+                                </td>
+                                <td>R<span x-text="LargePizzaTot.toFixed(2)"></span></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">Total</td>
+                                <td>R<span x-text="cartTot().toFixed(2)"></span></td>
+                            </tr>
+                            <tr x-show="totalQty() > 0">
+                                <td colspan="2">
+                                    <div x-show="payNow">
+                                        <div class="message" x-text="paymentMessage">Message....</div>
+                                        <div class="b1">
+                                            <div>
+                                                <label for="">Pay Amount</label>
+                                                <input class="input" type="number" placeholder="Pay Amount" x-model="paymentAmount">
+                                            </div>
+                                            <div>
+                                                <button x-on:click="makePayment" class="btn">
+                                                    <img src="cart.png" width="20" alt="">Pay Now
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <button x-show="!payNow" x-on:click="payNow = true" class="btn5">
+                                        <img src="cart.png" width="20" alt="">Check out
+                                    </button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pictures and Other Content Section -->
+        <section class="container">
+            <div class="noki">
+                <h1>Perfect Pizza</h1>
+                <p>Perfection you can imagine</p>
+            </div>
+            <section class="moon">
+                <div class="pizza small_pizza">
+                    <img src="https://media.istockphoto.com/id/1195804621/photo/hot-fresh-baked-italian-pizza-isolated-on-white-background-top-view-flat-lay.jpg?s=612x612&w=0&k=20&c=vpftEh0AZb6cjT0nsrZmCqjVD4dNBJCpX70-egXZzSQ=" alt="Small Pizza">
+                    <div class="sun">
+                        <h2>Small Pizza</h2>
+                        <p>R49.00</p>
+                        <button class="btn" x-on:click="buyspizza">ADD TO CART</button>
+                        <div x-show="notification === 'Small Pizza added to cart'" class="notification"><strong>Small🍕on cart</strong></div>
+                        <div>Delicious sweet small-size pizza for you to enjoy</div>
+                    </div>
+                </div>
+                <div class="pizza medium_pizza">
+                    <img src="https://media.istockphoto.com/id/147280821/photo/pepperoni-pizza.jpg?s=612x612&w=0&k=20&c=CyS5zrtyhTV1qv39pyBRmrKNw-g1RKgwYwolde1raNA=" alt="Medium Pizza">
+                    <div class="sun">
+                        <h2>Medium Pizza</h2>
+                        <p>R89.00</p>
+                        <button class="btn" x-on:click="buympizza">ADD TO CART</button>
+                        <div x-show="notification === 'Medium Pizza added to cart'" class="notification"><strong>medium🍕on cart </strong></div>
+                        <div>Sweet sharing pizza for you and your friend</div>
+                    </div>
+                </div>
+                <div class="pizza large_pizza">
+                    <img src="https://media.istockphoto.com/id/1287075238/photo/whole-pizza-with-four-different-type-of-toppings-isolated-on-white-background.jpg?s=612x612&w=0&k=20&c=JvhL-SIgQC6Ykpd2vOp59IL3BC7Q8xBGMUMZPws7H9c=" alt="Large Pizza">
+                    <div class="sun">
+                        <h2>Large Pizza</h2>
+                        <p>R169.00</p>
+                        <button class="btn" x-on:click="buylpizza">ADD TO CART</button>
+                        <div x-show="notification === 'Large Pizza added to cart'" class="notification"><strong> Large🍕on cart</strong></div>
+                        <div>Sweet family pizza for great time, Share and feel awesome</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="noki">
+                <h2>Contact Details</h2>
+                <p>Contact us at: 079-153-7447</p>
+                <p>info@perfectpizza.co.za</p>
+            </section>
+        </section>
+
+        <!-- Alpine.js Script -->
+        <script>
+            document.addEventListener('alpine:init', () => {
+                Alpine.data('pizzaCart', () => ({
+                    showCart: false,
+                    SmallPizzaTot: 0.00,
+                    SpizzaQty: 0,
+                    MediumPizzaTot: 0.00,
+                    mpizzaQty: 0,
+                    LargePizzaTot: 0.00,
+                    lpizzaQty: 0,
+                    payNow: false,
+                    paymentAmount: 0,
+                    paymentMessage: '',
+                    notification: '',
+                    buyspizza() {
+                        this.SmallPizzaTot += 49.00;
+                        this.SpizzaQty += 1;
+                        this.showNotification('Small Pizza added to cart');
+                    },
+                    cancelspizza() {
+                        if (this.SpizzaQty > 0) {
+                            this.SmallPizzaTot -= 49.00;
+                            this.SpizzaQty -= 1;
+                        }
+                    },
+                    buympizza() {
+                        this.MediumPizzaTot += 89.00;
+                        this.mpizzaQty += 1;
+                        this.showNotification('Medium Pizza added to cart');
+                    },
+                    cancelmpizza() {
+                        if (this.mpizzaQty > 0) {
+                            this.MediumPizzaTot -= 89.00;
+                            this.mpizzaQty -= 1;
+                        }
+                    },
+                    buylpizza() {
+                        this.LargePizzaTot += 169.00;
+                        this.lpizzaQty += 1;
+                        this.showNotification('Large Pizza added to cart');
+                    },
+                    cancellpizza() {
+                        if (this.lpizzaQty > 0) {
+                            this.LargePizzaTot -= 169.00;
+                            this.lpizzaQty -= 1;
+                        }
+                    },
+                    cartTot() {
+                        return this.SmallPizzaTot + this.MediumPizzaTot + this.LargePizzaTot;
+                    },
+                    totalQty() {
+                        return this.SpizzaQty + this.mpizzaQty + this.lpizzaQty;
+                    },
+                    makePayment() {
+                        if (!this.paymentAmount) {
+                            this.paymentMessage = 'No amount entered!';
+                        } else if (this.paymentAmount >= this.cartTot()) {
+                            this.paymentMessage = 'Payment successful';
+                            setTimeout(() => {
+                                this.payNow = false;
+                                this.showCart = false;
+                                this.clearCart();
+                            }, 5000);
+                        } else {
+                            this.paymentMessage = 'Sorry - that is not enough money!';
+                            setTimeout(() => {
+                                this.payNow = false;
+                                this.showCart = false;
+                                this.clearCart();
+                            }, 5000);
+                        }
+                    },
+                    clearCart() {
+                        this.SmallPizzaTot = 0.00;
+                        this.SpizzaQty = 0;
+                        this.MediumPizzaTot = 0.00;
+                        this.mpizzaQty = 0;
+                        this.LargePizzaTot = 0.00;
+                        this.lpizzaQty = 0;
+                    },
+                    showNotification(message) {
+                        this.notification = message;
+                        document.querySelector('.notification').style.display = 'block';
+                        setTimeout(() => {
+                            this.notification = '';
+                            document.querySelector('.notification').style.display = 'none';
+                        }, 2000);
+                    }
+                }));
+            });
+        </script>
+        
+    </div>
+</body>
+
+</html>
